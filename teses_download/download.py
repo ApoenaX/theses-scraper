@@ -73,9 +73,14 @@ def download_multiple_pdfs(
     urls: list[str], output_dir: str, cache: Cache
 ) -> list:
     console = Console()
-    console.print(f"Percorrendo {len(urls)} urls...")
     for url in track(urls, description="Baixando arquivos..."):
         current_id = url.split("=")[-1]
+        if not current_id.isdigit():
+            console.log(
+                f":x: Não foi possível obter o id do arquivo: {url}",
+                style="bold red1",
+            )
+            continue
         if current_id in cache:
             console.log(
                 f":white_check_mark: Arquivo {current_id} já baixado",
