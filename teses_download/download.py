@@ -20,7 +20,7 @@ from .cache import Cache
 def download_pdf(url: str, id: int, output_dir: str) -> str | None:
     headers = {
         "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:88.0) Gecko/20100101 Firefox/88.0",
-        "Accept": "application/pdf, */*;q=0.1",
+        "Accept": "*/*",
         "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
         "Origin": "https://sucupira.capes.gov.br",
         "Connection": "keep-alive",
@@ -35,7 +35,7 @@ def download_pdf(url: str, id: int, output_dir: str) -> str | None:
     output_dir.mkdir(parents=True, exist_ok=True)
 
     with requests.session() as session:
-        r = session.get(url)
+        r = session.get(url, headers=headers, timeout=7)
         r.raise_for_status()
 
         soup = BeautifulSoup(r.text, "html.parser")
@@ -61,7 +61,14 @@ def download_pdf(url: str, id: int, output_dir: str) -> str | None:
         filepath = output_dir / f"{id}-{pdf_name}.pdf"
 
         resp = session.post(
-            url, data=form_data, stream=True, headers=headers, timeout=7
+            url,
+            data=form_data,
+            stream=True,
+            headers={
+                **headers,
+                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/",
+            },
+            timeout=7,
         )
         with open(filepath, "wb") as f:
             f.write(resp.content)
