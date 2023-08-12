@@ -48,7 +48,9 @@ class __AbstractCache(ABC):
 
 
 class Cache(__AbstractCache):
-    def __init__(self, path: str, db_name: str = "cache.sqlite3"):
+    def __init__(
+        self, path: str = "/tmp/cache/", db_name: str = "cache.sqlite3"
+    ):
         super(Cache, self).__init__(path)
         os.makedirs(path, exist_ok=True)
         self.path = path
@@ -183,5 +185,7 @@ class Cache(__AbstractCache):
                 return [(i[0], i[1]) for i in cursor.fetchall()]
 
 
-def create_cache(path: str, db_name: str = "cache.db") -> Cache:
+def create_cache(
+    path: str = "/tmp/cache/", db_name: str = "db.sqlite3"
+) -> Cache:
     return Cache(path, db_name)
