@@ -100,6 +100,7 @@ def download_multiple_pdfs(
             console.log(f":x: Request error: {e}", style="bold red1")
         except KeyboardInterrupt:
             console.log(f":warning: Keyboard interrupt", style="bold red1")
+            return
         except Exception as e:
             console.log(
                 f":skull: Unknown error: {url} - {e}", style="bold red1"
