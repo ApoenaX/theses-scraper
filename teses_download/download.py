@@ -21,9 +21,7 @@ from .cache import Cache
 def download_pdf(url: str, id: int, output_dir: str) -> str | None:
     headers = {
         "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:88.0) Gecko/20100101 Firefox/88.0",
-        "Accept": "*/*",
-        "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-        "Origin": "https://sucupira.capes.gov.br",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
         "Connection": "keep-alive",
         "Accept-Language": "pt-BR,pt;q=0.8,en-US;q=0.5,en;q=0.3",
         "Accept-Encoding": "gzip, deflate, br",
@@ -68,6 +66,8 @@ def download_pdf(url: str, id: int, output_dir: str) -> str | None:
                 **headers,
                 "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/",
                 "Referer": url,
+                "Content-Type": "application/x-www-form-urlencoded",
+                "Origin": "https://sucupira.capes.gov.br",
             },
             timeout=7,
         )
