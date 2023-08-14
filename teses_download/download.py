@@ -2,6 +2,7 @@ import requests
 import pathlib
 from bs4 import BeautifulSoup
 import tenacity
+import time
 from rich.progress import track
 from rich.console import Console
 from tenacity import stop_after_attempt, wait_fixed, wait_random
@@ -9,8 +10,8 @@ from .cache import Cache
 
 
 @tenacity.retry(
-    stop=stop_after_attempt(5),
-    wait=wait_fixed(5) + wait_random(0, 5),
+    stop=stop_after_attempt(2),
+    wait=wait_fixed(4) + wait_random(0, 3),
     reraise=True,
     retry=tenacity.retry_if_exception_type(requests.exceptions.HTTPError)
     | tenacity.retry_if_exception_type(requests.exceptions.ConnectionError)
@@ -24,7 +25,6 @@ def download_pdf(url: str, id: int, output_dir: str) -> str | None:
         "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
         "Origin": "https://sucupira.capes.gov.br",
         "Connection": "keep-alive",
-        "Referer": url,
         "Accept-Language": "pt-BR,pt;q=0.8,en-US;q=0.5,en;q=0.3",
         "Accept-Encoding": "gzip, deflate, br",
         "Connection": "keep-alive",
@@ -59,7 +59,7 @@ def download_pdf(url: str, id: int, output_dir: str) -> str | None:
             return None
 
         filepath = output_dir / f"{id}-{pdf_name}.pdf"
-
+        time.sleep(2) # antes do post
         resp = session.post(
             url,
             data=form_data,
@@ -67,6 +67,7 @@ def download_pdf(url: str, id: int, output_dir: str) -> str | None:
             headers={
                 **headers,
                 "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/",
+                "Referer": url,
             },
             timeout=7,
         )
