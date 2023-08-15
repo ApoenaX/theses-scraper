@@ -56,7 +56,7 @@ def download_pdf(url: str, id: int, output_dir: str) -> str | None:
         if not pdf_name:
             return None
 
-        filepath = output_dir / f"{id}-{pdf_name}.pdf"
+        filepath = output_dir / f"{id}-{pdf_name}"
         time.sleep(2) # antes do post
         resp = session.post(
             url,
@@ -69,7 +69,7 @@ def download_pdf(url: str, id: int, output_dir: str) -> str | None:
                 "Content-Type": "application/x-www-form-urlencoded",
                 "Origin": "https://sucupira.capes.gov.br",
             },
-            timeout=7,
+            timeout=60,
         )
         with open(filepath, "wb") as f:
             f.write(resp.content)
