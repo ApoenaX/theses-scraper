@@ -3,7 +3,7 @@ import pathlib
 from bs4 import BeautifulSoup
 import tenacity
 import time
-from rich.progress import track
+from tqdm.auto import tqdm
 from rich.console import Console
 from tenacity import stop_after_attempt, wait_fixed, wait_random
 from .cache import Cache
@@ -57,7 +57,7 @@ def download_pdf(url: str, id: int, output_dir: str) -> str | None:
             return None
 
         filepath = output_dir / f"{id}-{pdf_name}"
-        time.sleep(2) # antes do post
+        time.sleep(2)  # antes do post
         resp = session.post(
             url,
             data=form_data,
@@ -81,7 +81,7 @@ def download_multiple_pdfs(
     urls: list[str], output_dir: str, cache: Cache
 ) -> list:
     console = Console()
-    for url in track(urls, description="Baixando arquivos..."):
+    for url in tqdm(urls, desc="Baixando arquivos..."):
         current_id = url.split("=")[-1]
         if not current_id.isdigit():
             console.log(
@@ -90,10 +90,6 @@ def download_multiple_pdfs(
             )
             continue
         if current_id in cache:
-            console.log(
-                f":white_check_mark: Arquivo {current_id} já baixado",
-                style="bold green1",
-            )
             continue
         try:
             filepath = download_pdf(url, current_id, output_dir)
