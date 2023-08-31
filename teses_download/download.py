@@ -18,7 +18,7 @@ from .cache import Cache
     | tenacity.retry_if_exception_type(requests.exceptions.Timeout)
     | tenacity.retry_if_exception_type(requests.exceptions.RequestException),
 )
-def download_pdf(url: str, id: int, output_dir: str) -> str | None:
+def download_pdf(url: str, id: int, output_dir: str, download_timeout: int = 60) -> str | None:
     headers = {
         "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:88.0) Gecko/20100101 Firefox/88.0",
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
@@ -57,7 +57,6 @@ def download_pdf(url: str, id: int, output_dir: str) -> str | None:
             return None
 
         filepath = output_dir / f"{id}-{pdf_name}"
-        time.sleep(2)  # antes do post
         resp = session.post(
             url,
             data=form_data,
@@ -69,7 +68,7 @@ def download_pdf(url: str, id: int, output_dir: str) -> str | None:
                 "Content-Type": "application/x-www-form-urlencoded",
                 "Origin": "https://sucupira.capes.gov.br",
             },
-            timeout=60,
+            timeout=download_timeout,
         )
         with open(filepath, "wb") as f:
             f.write(resp.content)
@@ -78,10 +77,10 @@ def download_pdf(url: str, id: int, output_dir: str) -> str | None:
 
 
 def download_multiple_pdfs(
-    urls: list[str], output_dir: str, cache: Cache
+    urls: list[str], output_dir: str, cache: Cache, timeout: int = 60
 ) -> list:
     console = Console()
-    for url in tqdm(urls, desc="Baixando arquivos..."):
+    for url in tqdm(urls, desc=f"Baixando arquivos com timeout de {timeout}s"):
         current_id = url.split("=")[-1]
         if not current_id.isdigit():
             console.log(
@@ -92,7 +91,7 @@ def download_multiple_pdfs(
         if current_id in cache:
             continue
         try:
-            filepath = download_pdf(url, current_id, output_dir)
+            filepath = download_pdf(url, current_id, output_dir, timeout)
             cache[current_id] = filepath
         except requests.exceptions.ConnectionError:
             console.log(f":x: Connection error: {url}", style="bold red1")
