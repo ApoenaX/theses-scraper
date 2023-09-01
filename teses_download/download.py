@@ -2,7 +2,7 @@ import requests
 import pathlib
 from bs4 import BeautifulSoup
 import tenacity
-import time
+import shutil
 from tqdm.auto import tqdm
 from rich.console import Console
 from tenacity import stop_after_attempt, wait_fixed, wait_random
@@ -18,7 +18,9 @@ from .cache import Cache
     | tenacity.retry_if_exception_type(requests.exceptions.Timeout)
     | tenacity.retry_if_exception_type(requests.exceptions.RequestException),
 )
-def download_pdf(url: str, id: int, output_dir: str, download_timeout: int = 60) -> str | None:
+def download_pdf(
+    url: str, id: int, output_dir: str, download_timeout: int = 60
+) -> str | None:
     headers = {
         "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:88.0) Gecko/20100101 Firefox/88.0",
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
@@ -57,7 +59,7 @@ def download_pdf(url: str, id: int, output_dir: str, download_timeout: int = 60)
             return None
 
         filepath = output_dir / f"{id}-{pdf_name}"
-        resp = session.post(
+        with session.post(
             url,
             data=form_data,
             stream=True,
@@ -69,10 +71,10 @@ def download_pdf(url: str, id: int, output_dir: str, download_timeout: int = 60)
                 "Origin": "https://sucupira.capes.gov.br",
             },
             timeout=download_timeout,
-        )
-        with open(filepath, "wb") as f:
-            f.write(resp.content)
-
+        ) as resp:
+            resp.raise_for_status()
+            with open(filepath, "wb") as f:
+                shutil.copyfileobj(resp.raw, f)
         return str(filepath)
 
 
@@ -98,9 +100,9 @@ def download_multiple_pdfs(
         except requests.exceptions.Timeout:
             console.log(f":x: Timeout error: {url}", style="bold red1")
         except requests.exceptions.HTTPError as e:
-            console.log(f":x: HTTP error: {e}", style="bold red1")
+            console.log(f":x: HTTP error: {url} - {e}", style="bold red1")
         except requests.exceptions.RequestException as e:
-            console.log(f":x: Request error: {e}", style="bold red1")
+            console.log(f":x: Request error: {url} - {e}", style="bold red1")
         except KeyboardInterrupt:
             console.log(f":warning: Keyboard interrupt", style="bold red1")
             return
