@@ -52,13 +52,17 @@ def download_pdf(
             "download:link_download_arquivo"
         ] = "download:link_download_arquivo"
 
-        pdf_name = soup.find("a", id="download:link_download_arquivo")
-        pdf_name = pdf_name.get_text() if pdf_name else ""
+        filename = soup.find("a", id="download:link_download_arquivo")
+        filename = filename.get_text() if filename else ""
 
-        if not pdf_name:
+        if not filename:
             return None
 
-        filepath = output_dir / f"{id}-{pdf_name}"
+        filepath = output_dir / f"{id}-{filename}"
+        filepath = filepath.with_name(
+            f"{filepath.stem[:200]}{filepath.suffix}"
+        )
+
         with session.post(
             url,
             data=form_data,
