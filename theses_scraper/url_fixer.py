@@ -1,5 +1,6 @@
 """Módulo com funções para corrigir e verificar URLs"""
 
+from urllib.parse import urlparse
 from functools import reduce
 
 _DENY_LIST = {
@@ -38,19 +39,17 @@ _DENY_LIST = {
     "www.movisaberesefazeresmigrantes.com",
     "sitios.anhembi.br",
     "www.bd.bibl.ita.br",
-    "www.bdita.bibl.ita.br",
     "tede.inatel.br:8080",
     "riu.ufam.edu.br",
-    "www.teses.ufc.br/",
-    "comum.rcaap.pt",
+    "www.teses.ufc.br",
     "rubi.casaruibarbosa.gov.br",
-    "dspace7fgv.neki-it.com.br",
     "repositorio.ismt.pt",
     "dspace.ismt.pt",
     "teses.ufrj.br",
     "www.uff.br",
     "app.uff.br",
-    "http://tede.fecap.br/",
+    "tede.fecap.br",
+    "tede.fecap.br:8080",
     "www2.unifesp.br",
     "www.egn.mar.mil.br",
     "repositorioinstitucional.uea.edu.br",
@@ -63,14 +62,22 @@ _DENY_LIST = {
     "repositorio.faema.edu.br:8000",
     "ppgss.ufsc.br",
     "unesp.primo.exlibrisgroup.com",
-    "repositorio.fgv.br",
-    "www.repositorio.unicamp.br",
-    "repositorio.uenp.edu.br",
 }
 
 _REPLACEMENTS = {
     "repositorio.lnec.pt:8080": "repositorio.lnec.pt",
     "http://tede2.usc.br:8080": "https://tede2.usc.br:8443",
+    "tede2.usc.br:8443/tede/handle/tede": "tede2.usc.br:8443/handle/tede",
+    "tede2.pucgoias.edu.br/tede/handle/tede": "tede2.pucgoias.edu.br/handle/tede",
+    "bibliotecatede.uninove.br/tede/handle/tede": "bibliotecatede.uninove.br/handle/tede",
+    "dspace.unila.edu.br/123456789": "dspace.unila.edu.br/handle/123456789",
+    "tede.bc.uepb.edu.br/tede/jspui": "tede.bc.uepb.edu.br/jspui",
+    "repositorio.idp.edu.br/123456789": "repositorio.idp.edu.br/handle/123456789",
+    "bdtd.ueg.br/tede/handle/tede": "bdtd.ueg.br/handle/tede",
+    "repositorio.unifesp.br/xmlui": "repositorio.unifesp.br",
+    "repositorio.ufpa.br/jspui/2011": "repositorio.ufpa.br/jspui/handle/2011",
+    "repositorio.ufpa.br/handle": "repositorio.ufpa.br/jspui/handle",
+    "repositorio.ufpa.br/jspui/handle2011": "repositorio.ufpa.br/jspui/handle/2011",
     "https://repositorio.ifba.edu.br": "http://repositorio.ifba.edu.br",
     "https://rigeo.cprm.gov.br": "http://rigeo.cprm.gov.br",
     "dspace.unipampa.edu.br:8080": "dspace.unipampa.edu.br",
@@ -83,12 +90,15 @@ _REPLACEMENTS = {
     "bibliodigital.unijui.edu.br/xmlui": "bibliodigital.unijui.edu.br",
     "vkali40.ucs.br:8080": "repositorio.ucs.br",
     "10.1.0.96:8080": "repositorio.ifba.edu.br",
+    "191.252.194.60": "repositorio.fdv.br",
     "prod.repositorio.ufscar.br": "repositorio.ufscar.br",
     "www7.bahiana.edu.br": "repositorio.bahiana.edu.br",
     "ri.ucsal.br:8080": "ri.ucsal.br",
     "ri.ucsal.br/jspui": "ri.ucsal.br",
     "10.0.217.128:8080": "tede.upf.br",
     "lrepositorio.ufra.edu.br": "repositorio.ufra.edu.br",
+    "repositorio.ufra.edu.br/jspui//jspui": "repositorio.ufra.edu.br/jspui",
+    "repositorio.ufra.edu.br/handle": "repositorio.ufra.edu.br/jspui/handle",
     "www.repositorio.fjp.mg.gov.br": "repositorio.fjp.mg.gov.br",
     "rigeoh.cprm.gov.br": "rigeo.cprm.gov.br",
     "200.129.163.131:8080": "tede.ufam.edu.br",
@@ -118,6 +128,7 @@ _REPLACEMENTS = {
     "repositorio.unb.br/jspui/jspui": "repositorio.unb.br/jspui",
     "dspace.idp.edu.br:8080/xmlui": "repositorio.idp.edu.br",
     "purl.net/esepf/handle": "hdl.handle.net",
+    "http://repositorio.ufba.br": "https://repositorio.ufba.br",
 }
 
 
@@ -146,3 +157,14 @@ def is_denied(url: str) -> bool:
     """Verifica se a url está na lista de urls não permitidas"""
     base_url = url.split("/")[2]
     return base_url in _DENY_LIST
+
+
+def is_valid_url(url):
+    """Verifica se a url é válida"""
+    if " " in url:
+        return False
+    try:
+        result = urlparse(url)
+        return all([result.scheme, result.netloc])
+    except ValueError:
+        return False
