@@ -62,6 +62,7 @@ _DENY_LIST = {
     "repositorio.faema.edu.br:8000",
     "ppgss.ufsc.br",
     "unesp.primo.exlibrisgroup.com",
+    "www.obrasraras.fiocruz.br",
 }
 
 _REPLACEMENTS = {
@@ -84,6 +85,7 @@ _REPLACEMENTS = {
     "repositorio.unilab.edu.br:8080": "repositorio.unilab.edu.br",
     "bd.bibl.ita.br": "bdita.bibl.ita.br",
     "teste.tede.unifacs.br:8080": "tede.unifacs.br",
+    "http://repositorio.ifap.edu.br": "https://repositorio.ifap.edu.br",
     "repositorio.ifap.edu.br:8080": "repositorio.ifap.edu.br",
     "http://repositorio.ufal.br": "http://www.repositorio.ufal.br",
     "bibliodigital.unijui.edu.br:8080": "bibliodigital.unijui.edu.br",
