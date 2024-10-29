@@ -131,6 +131,9 @@ _REPLACEMENTS = {
     "dspace.idp.edu.br:8080/xmlui": "repositorio.idp.edu.br",
     "purl.net/esepf/handle": "hdl.handle.net",
     "http://repositorio.ufba.br": "https://repositorio.ufba.br",
+    "repositorio.pucsp.br/xmlui/bitstream": "repositorio.pucsp.br/bitstream",
+    "repositorio.bc.ufg.br/bitstreams": "repositorio.bc.ufg.br/tede/bitstreams",
+    "repositorio.fgv.br/items": "repositorio.fgv.br",
 }
 
 
