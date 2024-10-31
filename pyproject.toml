@@ -1,20 +1,15 @@
-[tool.poetry]
-name = "teses-download"
+[project]
+name = "theses_scraper"
 version = "0.1.0"
-description = ""
-authors = ["Jessica Sousa <jessicasousa.pc@gmail.com>"]
+description = "A simple web scraper for theses"
 readme = "README.md"
-packages = [{include = "teses_download"}]
-
-[tool.poetry.dependencies]
-python = "^3.10"
-requests = "2.31.0"
-ray = {version = "2.6.2", extras = ["default"]}
-beautifulsoup4 = "4.12.2"
-rich = "13.5.2"
-tenacity = "8.2.2"
-
+requires-python = ">=3.12"
+dependencies = [
+    "beautifulsoup4>=4.12.3",
+    "httpx>=0.27.2",
+    "selenium>=4.26.0",
+]
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"

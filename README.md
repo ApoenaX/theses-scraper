@@ -1,45 +1,34 @@
-[![Packaged with Poetry][poetry-badge]](https://python-poetry.org/)
-[![Python 3.11][python-badge]](https://www.python.org/)
-# teses-download
+[![uv][uv-badge]](https://github.com/astral-sh/uv)
+[![Python 3.12][python-badge]](https://www.python.org/)
+# theses-scraper
 
-Script para fazer download das teses e dissertações da CAPES.
+Script para fazer download das teses e dissertações em repositórios de universidades brasileiras. No momento, o script suporta alguns repositórios específicos, mas a ideia é expandir para outros repositórios.
 
 ## Início Rápido
 1. Instalar dependências do projeto
 ```sh
-git clone https://github.com/AcademicAI/teses-download.git
-cd teses-catalogo && pip install .
-```
-
-2. Passar lista de [urls](https://gist.github.com/jessicacardoso/d711ed26a1c33555085d7d470d55bd45) da plataforma e diretório para salvar pdfs.
-```sh
-python -m teses_download "urls.txt" "./Trabalhos/"
+git clone https://github.com/ApoenaX/theses-scraper.git
+cd theses-scraper && pip install .
 ```
 
 ## Usando a bilioteca
 
 
-1. Download de várias urls
+1. Download de um trabalho
 ```python
-from teses_download import download
-from teses_download import cache
+from theses_scraper.parsers import ParserFactory
+from theses_scraper.downloader import DocumentDownloader
 
-with open("/content/urls.txt", "r") as f:
-     urls = f.read().splitlines()
+url = "https://monografias.ufma.br/jspui/handle/123456789/3510"
 
-my_cache = cache.create_cache()
-download.download_multiple_pdfs(urls,"/content/pdfs", my_cache)
+parser = ParserFactory.get_parser(url)
+document: str | list[str] = parser.get_pdf_link(url)
+
+downloader = DocumentDownloader("./data")
+downloader.download(document)
 ```
 
-2. Download de uma url específica
-```python
-from teses_download import download
 
-url = "https://sucupira.capes.gov.br/sucupira/public/consultas/coleta/trabalhoConclusao/viewTrabalhoConclusao.xhtml?popup=true&id_trabalho=13398016"
-id = int(url.split("=")[-1])
-download.download_pdf(url, id, "./diretorio-teste")
-```
-
-[poetry-badge]: https://img.shields.io/badge/packaging-poetry-cyan.svg
-[python-badge]: https://img.shields.io/badge/python-3.10%20%7C%203.11-blue
+[uv-badge]: https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json
+[python-badge]: https://img.shields.io/badge/python-3.12-blue
 
