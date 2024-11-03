@@ -5,6 +5,7 @@ from .maxwell import MaxwellParser
 from .sophia import SophiaParser
 from .selenium_parser import SeleniumParser
 from .ufrr import UFRRParser
+from .cespu import CESPUParser
 
 
 class ParserFactory:
@@ -24,11 +25,12 @@ class ParserFactory:
                 "repositorio.pgsskroton.com",
                 "repositorio.pgsscogna.com.br",
                 "repositorio.unesp.br",
-                "locus.ufv.br",
-                "www.locus.ufv.br",
+                "ufvjm.edu.br",
             ]
         ):
             return SeleniumParser()
         elif "bdtd.ufrr.br" in url:
             return UFRRParser()
+        elif "repositorio.cespu.pt" in url:
+            return CESPUParser()
         return GenericParser()

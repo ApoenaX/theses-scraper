@@ -1,7 +1,7 @@
 """Módulo com o parser genérico para repositórios institucionais."""
 
 import re
-from urllib.parse import urljoin
+from urllib.parse import urljoin, urlparse
 from bs4 import BeautifulSoup
 from theses_scraper.utils import http_utils
 from .parser import Parser
@@ -37,7 +37,27 @@ class GenericParser(Parser):
     def find_meta_pdf_url(soup: BeautifulSoup, base_url: str) -> str | None:
         """Busca o link PDF na tag meta, se existir."""
         meta_tag = soup.find("meta", {"name": "citation_pdf_url"})
-        return urljoin(base_url, meta_tag["content"]) if meta_tag else None
+        if meta_tag:
+            pdf_url = meta_tag.get("content")
+            return GenericParser.normalize_localhost_url(pdf_url, base_url)
+
+    @staticmethod
+    def normalize_localhost_url(pdf_url: str, base_url: str) -> str:
+        """
+        Substitui 'localhost' no URL pelo domínio da URL base.
+
+        Parâmetros:
+            pdf_url (str): URL do PDF a ser corrigida.
+            base_url (str): URL base do repositório.
+
+        Retorna:
+            str: URL do PDF corrigida.
+        """
+        parsed_url = urlparse(pdf_url)
+        if parsed_url.hostname == "localhost":
+            base_netloc = urlparse(base_url).netloc
+            pdf_url = pdf_url.replace(f"localhost:{parsed_url.port}", base_netloc)
+        return pdf_url
 
     @staticmethod
     def extract_pdf_url_from_soup(soup: BeautifulSoup, base_url: str) -> str | None:

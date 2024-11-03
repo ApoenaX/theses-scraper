@@ -97,6 +97,7 @@ _REPLACEMENTS = {
     "www7.bahiana.edu.br": "repositorio.bahiana.edu.br",
     "ri.ucsal.br:8080": "ri.ucsal.br",
     "ri.ucsal.br/jspui": "ri.ucsal.br",
+    "http://ri.ucsal.br": "https://ri.ucsal.br",
     "10.0.217.128:8080": "tede.upf.br",
     "lrepositorio.ufra.edu.br": "repositorio.ufra.edu.br",
     "repositorio.ufra.edu.br/jspui//jspui": "repositorio.ufra.edu.br/jspui",
@@ -118,6 +119,7 @@ _REPLACEMENTS = {
     "repositorio.cruzeirodosul.edu.br": "repositorio.cruzeirodosul.edu.br/jspui",
     "repositorio.cruzeirodosul.edu.br/jspui/jspui": "repositorio.cruzeirodosul.edu.br/jspui",
     "tede2.unisagrado.edu.br:8080": "tede2.unisagrado.edu.br:8443",
+    "http://tede2.unisagrado.edu.br": "https://tede2.unisagrado.edu.br",
     "http://repositorio.ufes.br": "https://repositorio.ufes.br",
     "tede.utp.br:8080": "tede.utp.br",
     "tede.unioeste.br:8080/tede": "tede.unioeste.br",
@@ -128,12 +130,17 @@ _REPLACEMENTS = {
     "tede2.uefs.br:8080/handle/tede/tede": "tede2.uefs.br:8080/handle/tede",
     "repositorio.unb.br": "repositorio.unb.br/jspui",
     "repositorio.unb.br/jspui/jspui": "repositorio.unb.br/jspui",
+    "repositorio.unb.br/bitstream": "repositorio.unb.br/jspui/bitstream",
     "dspace.idp.edu.br:8080/xmlui": "repositorio.idp.edu.br",
     "purl.net/esepf/handle": "hdl.handle.net",
     "http://repositorio.ufba.br": "https://repositorio.ufba.br",
     "repositorio.pucsp.br/xmlui/bitstream": "repositorio.pucsp.br/bitstream",
     "repositorio.bc.ufg.br/bitstreams": "repositorio.bc.ufg.br/tede/bitstreams",
     "repositorio.fgv.br/items": "repositorio.fgv.br",
+    "http://rdu.unicesumar.edu.br": "https://rdu.unicesumar.edu.br",
+    "http://www.repositorio.ufop.br": "https://repositorio.ufop.br",
+    "http://locus.ufv.br": "https://locus.ufv.br",
+    "http://www.locus.ufv.br": "https://locus.ufv.br",
 }
 
 
