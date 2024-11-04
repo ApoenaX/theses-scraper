@@ -26,6 +26,11 @@ class ParserFactory:
                 "repositorio.pgsscogna.com.br",
                 "repositorio.unesp.br",
                 "ufvjm.edu.br",
+                "locus.ufv.br",
+                "repositorio.ipen.br",
+                "repositorio.gasparvianna.pa.gov.br",
+                "patua.iec.gov.br",
+                "repositorio.esenfc.pt",
             ]
         ):
             return SeleniumParser()
