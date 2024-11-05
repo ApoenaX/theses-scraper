@@ -13,13 +13,13 @@ class Parser(ABC):
 
     @abstractmethod
     # retorna o html da página e a url final
-    def get_html(self, url: str, **kwargs) -> tuple[str, str]:
+    async def get_html(self, url: str, **kwargs) -> tuple[str, str]:
         """
         Obtém o HTML da página e a URL final.
         """
 
     @abstractmethod
-    def get_pdf_link(self, url: str, **kwargs) -> str | list[str] | None:
+    async def get_pdf_link(self, url: str, **kwargs) -> str | list[str] | None:
         """
         Extrai o link do PDF da página.
         """

@@ -12,7 +12,7 @@ class SophiaParser(GenericParser):
     Parser para o repositório Sophia.
     """
 
-    def get_html(self, url: str, **kwargs) -> tuple[str, str]:
+    async def get_html(self, url: str, **kwargs) -> tuple[str, str]:
         """
         Obtém o HTML da página e a URL final.
         """
@@ -21,14 +21,14 @@ class SophiaParser(GenericParser):
             return "", ""
         new_url = f"https://{urlparse(url).netloc}/php"
         download_page_url = f"{new_url}/midia.php?tipo=1&codigo={sophia_code}"
-        response = http_utils.get(download_page_url, **kwargs)
+        response = await http_utils.get(download_page_url, **kwargs)
         return response.content, str(response.url)
 
-    def get_pdf_link(self, url: str, **kwargs) -> str | list[str] | None:
+    async def get_pdf_link(self, url: str, **kwargs) -> str | list[str] | None:
         """
         Extrai o link do PDF da página.
         """
-        html, url = self.get_html(url, **kwargs)
+        html, url = await self.get_html(url, **kwargs)
         soup = BeautifulSoup(html, "html.parser")
         if pdf_url := self.find_meta_pdf_url(soup, url):
             return pdf_url

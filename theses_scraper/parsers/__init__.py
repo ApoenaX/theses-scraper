@@ -3,7 +3,7 @@
 from .generic import GenericParser
 from .maxwell import MaxwellParser
 from .sophia import SophiaParser
-from .selenium_parser import SeleniumParser
+from .dynamic_parser import DynamicContentParser
 from .ufrr import UFRRParser
 from .cespu import CESPUParser
 
@@ -26,14 +26,13 @@ class ParserFactory:
                 "repositorio.pgsscogna.com.br",
                 "repositorio.unesp.br",
                 "ufvjm.edu.br",
-                "locus.ufv.br",
-                "repositorio.ipen.br",
-                "repositorio.gasparvianna.pa.gov.br",
                 "patua.iec.gov.br",
                 "repositorio.esenfc.pt",
+                "repositorio.unifesp.br",
+                "ipen.br",
             ]
         ):
-            return SeleniumParser()
+            return DynamicContentParser()
         elif "bdtd.ufrr.br" in url:
             return UFRRParser()
         elif "repositorio.cespu.pt" in url:

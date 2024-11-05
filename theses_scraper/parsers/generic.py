@@ -12,22 +12,22 @@ class GenericParser(Parser):
     Parser para repositórios institucionais genéricos.
     """
 
-    def get_html(self, url: str, **kwargs) -> tuple[str, str]:
+    async def get_html(self, url: str, **kwargs) -> tuple[str, str]:
         """
         Obtém o HTML da página e a URL final.
         """
-        response = http_utils.get(url, **kwargs)
+        response = await http_utils.get(url, **kwargs)
         return response.content, str(response.url)
 
-    def get_pdf_link(self, url: str, **kwargs) -> str | list[str] | None:
+    async def get_pdf_link(self, url: str, **kwargs) -> str | list[str] | None:
         """
         Extrai o link do PDF da página.
         """
         if url.endswith(".pdf"):
             return url
-        if http_utils.is_pdf(url):
+        if await http_utils.is_pdf(url):
             return url
-        html, url = self.get_html(url, **kwargs)
+        html, url = await self.get_html(url, **kwargs)
         soup = BeautifulSoup(html, "html.parser")
         if pdf_url := self.find_meta_pdf_url(soup, url):
             return pdf_url
