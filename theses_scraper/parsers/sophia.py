@@ -2,8 +2,11 @@
 
 import re
 from urllib.parse import urlparse
+
 from bs4 import BeautifulSoup
+
 from theses_scraper.utils import http_utils
+
 from .generic import GenericParser
 
 

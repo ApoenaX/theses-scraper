@@ -2,8 +2,11 @@
 
 import re
 from urllib.parse import urljoin, urlparse
+
 from bs4 import BeautifulSoup
+
 from theses_scraper.utils import http_utils
+
 from .parser import Parser
 
 
@@ -56,18 +59,26 @@ class GenericParser(Parser):
         parsed_url = urlparse(pdf_url)
         if parsed_url.hostname == "localhost":
             base_netloc = urlparse(base_url).netloc
-            pdf_url = pdf_url.replace(f"localhost:{parsed_url.port}", base_netloc)
+            pdf_url = pdf_url.replace(
+                f"localhost:{parsed_url.port}", base_netloc
+            )
         return pdf_url
 
     @staticmethod
-    def extract_pdf_url_from_soup(soup: BeautifulSoup, base_url: str) -> str | None:
+    def extract_pdf_url_from_soup(
+        soup: BeautifulSoup, base_url: str
+    ) -> str | None:
         """Extrai o link do PDF a partir de um objeto BeautifulSoup."""
         if pdf_url := GenericParser.find_meta_pdf_url(soup, base_url):
             return pdf_url
 
         pdf_patterns = [
             {"tag": "object", "attr": "data", "mime_type": "application/pdf"},
-            {"tag": "a", "attr": "href", "pattern": r"/Busca/Download\?codigoArquivo="},
+            {
+                "tag": "a",
+                "attr": "href",
+                "pattern": r"/Busca/Download\?codigoArquivo=",
+            },
             {"tag": "a", "attr": "href", "pattern": r"/bitstream.*\.pdf$"},
             {
                 "tag": "a",

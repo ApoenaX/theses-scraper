@@ -1,7 +1,7 @@
 """Módulo com funções para corrigir e verificar URLs"""
 
-from urllib.parse import urlparse
 from functools import reduce
+from urllib.parse import urlparse
 
 _DENY_LIST = {
     "",
@@ -159,7 +159,9 @@ def update_url(url: str) -> str:
         'https://tede2.usc.br:8443'
     """
     return reduce(
-        lambda updated_url, target: updated_url.replace(target, _REPLACEMENTS[target]),
+        lambda updated_url, target: updated_url.replace(
+            target, _REPLACEMENTS[target]
+        ),
         _REPLACEMENTS,
         url,
     )

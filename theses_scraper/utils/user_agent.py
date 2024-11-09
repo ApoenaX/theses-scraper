@@ -1,7 +1,8 @@
 """Módulo para representar um User Agent."""
 
-import time
 import random
+import time
+
 from ua_parser import user_agent_parser
 
 
@@ -126,7 +127,8 @@ class UserAgentManager:
         """Retorna um User Agent aleatório."""
         self._update_weights()
         weights = [
-            self._weights[ua.os] + self._weights[ua.browser] for ua in self.user_agents
+            self._weights[ua.os] + self._weights[ua.browser]
+            for ua in self.user_agents
         ]
         user_agent = random.choices(self.user_agents, weights=weights)[0]
         user_agent.last_access = time.time()

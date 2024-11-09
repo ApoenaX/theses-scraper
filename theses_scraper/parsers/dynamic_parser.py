@@ -1,6 +1,7 @@
 """Module for SeleniumParser class."""
 
 from playwright.async_api import async_playwright
+
 from .generic import GenericParser
 
 
@@ -19,7 +20,9 @@ class DynamicContentParser(GenericParser):
         user_agent = headers.get("User-Agent") if headers else None
 
         async with async_playwright() as playwright:
-            browser = await playwright.chromium.launch(headless=True, proxy=proxy)
+            browser = await playwright.chromium.launch(
+                headless=True, proxy=proxy
+            )
             context = await browser.new_context(user_agent=user_agent)
             page = await context.new_page()
             await page.goto(url)

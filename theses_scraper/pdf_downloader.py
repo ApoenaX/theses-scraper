@@ -3,6 +3,7 @@
 import re
 import time
 from urllib.parse import urljoin, urlparse
+
 import httpx
 from bs4 import BeautifulSoup
 from selenium import webdriver
@@ -112,7 +113,8 @@ class PDFDownloader:
         response = PDFDownloader.get(download_page_url, **kwargs)
 
         return PDFDownloader.extract_pdf_url_from_soup(
-            BeautifulSoup(response.content, "html.parser"), base_url=download_page_url
+            BeautifulSoup(response.content, "html.parser"),
+            base_url=download_page_url,
         )
 
     @staticmethod
@@ -122,7 +124,9 @@ class PDFDownloader:
         return match.group(1) if match else None
 
     @staticmethod
-    def extract_pdf_url_from_soup(soup: BeautifulSoup, base_url: str) -> str | None:
+    def extract_pdf_url_from_soup(
+        soup: BeautifulSoup, base_url: str
+    ) -> str | None:
         """
         Extrai a URL do PDF a partir do HTML.
 
@@ -138,7 +142,11 @@ class PDFDownloader:
 
         pdf_patterns = [
             {"tag": "object", "attr": "data", "type": "application/pdf"},
-            {"tag": "a", "attr": "href", "pattern": r"/Busca/Download\?codigoArquivo="},
+            {
+                "tag": "a",
+                "attr": "href",
+                "pattern": r"/Busca/Download\?codigoArquivo=",
+            },
             {"tag": "a", "attr": "href", "pattern": r"/bitstream.*\.pdf$"},
             {
                 "tag": "a",
@@ -223,6 +231,9 @@ class PDFDownloader:
             options = select.find_all("option", value=lambda v: v)
             links = [
                 a["href"]
-                for a in soup.find_all("a", href=lambda a: a and "pdf" in a.lower())
+                for a in soup.find_all(
+                    "a", href=lambda a: a and "pdf" in a.lower()
+                )
             ]
+            return links if len(options) == len(links) else None
             return links if len(options) == len(links) else None

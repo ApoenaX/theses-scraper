@@ -1,11 +1,11 @@
 """Módulo com a fábrica de parsers."""
 
+from .cespu import CESPUParser
+from .dynamic_parser import DynamicContentParser
 from .generic import GenericParser
 from .maxwell import MaxwellParser
 from .sophia import SophiaParser
-from .dynamic_parser import DynamicContentParser
 from .ufrr import UFRRParser
-from .cespu import CESPUParser
 
 
 class ParserFactory:

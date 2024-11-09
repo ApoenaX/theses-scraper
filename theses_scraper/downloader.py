@@ -1,6 +1,7 @@
 """Módulo para realizar o download de documentos PDF e Word."""
 
 from pathlib import Path
+
 from .utils import http_utils
 
 

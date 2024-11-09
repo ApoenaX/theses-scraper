@@ -1,7 +1,9 @@
 """Este módulo contém o parser para o repositório da UFRR."""
 
 from urllib.parse import urljoin
+
 from bs4 import BeautifulSoup
+
 from .generic import GenericParser
 
 

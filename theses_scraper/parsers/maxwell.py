@@ -1,6 +1,7 @@
 """Módulo para extrair links de PDFs da biblioteca Maxwell."""
 
 from bs4 import BeautifulSoup
+
 from .generic import GenericParser
 
 
@@ -24,7 +25,9 @@ class MaxwellParser(GenericParser):
             options = select.find_all("option", value=lambda v: v)
             links = [
                 a["href"]
-                for a in soup.find_all("a", href=lambda a: a and "pdf" in a.lower())
+                for a in soup.find_all(
+                    "a", href=lambda a: a and "pdf" in a.lower()
+                )
             ]
             return links if len(options) == len(links) else None
         return links
